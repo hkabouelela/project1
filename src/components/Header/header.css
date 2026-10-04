@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* ==========================================================================
+   Header - Matching Design Prototype
+   ========================================================================== */
+
+.site-header {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 44px;
+  border-bottom: 1px solid #eaecf0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.site-header *,
+.site-header *::before,
+.site-header *::after {
+  box-sizing: border-box;
+}
+
+/* Left Group: Logo & Nav */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.header-logo {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #3730a3;
+  text-decoration: none;
+  letter-spacing: -0.025em;
+  transition: opacity 0.2s ease;
+  user-select: none;
+}
+
+.header-logo:hover {
+  opacity: 0.88;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.header-nav-link {
+  color: #4b5563;
+  font-size: 0.96rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  letter-spacing: -0.01em;
+}
+
+.header-nav-link:hover {
+  color: #0f172a;
+}
+
+/* Right Group: Search & Actions */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Search Input Pill */
+.header-search-wrap {
+  display: flex;
+  align-items: center;
+  background-color: #f1f4f9;
+  border: 1px solid #dce4ef;
+  border-radius: 9999px;
+  padding: 0 16px;
+  height: 40px;
+  width: 310px;
+  transition: all 0.2s ease;
+}
+
+.header-search-wrap:focus-within {
+  background-color: #ffffff;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.search-icon {
+  color: #64748b;
+  font-size: 15px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #1e293b;
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: #8c9cb0;
+  font-weight: 400;
+}
+
+/* Action Icons */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-action-btn {
+  background: none;
+  border: none;
+  padding: 6px;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.header-action-btn:hover {
+  color: #3730a3;
+  background-color: #f1f5f9;
+}
+
+.cart-icon-btn {
+  position: relative;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 5px rgba(239, 68, 68, 0.4);
+  animation: cartBadgePop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes cartBadgePop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.action-icon {
+  font-size: 21px;
+}
+
+/* User Account Dropdown */
+.user-dropdown-container {
+  position: relative;
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  min-width: 140px;
+  padding: 6px;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-item {
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  background: none;
+  border: none;
+  text-align: left;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.logout-btn {
+  color: #ef4444;
+}
+
+.logout-btn:hover {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+/* Responsive adjustments */
+@media (max-width: 860px) {
+  .site-header {
+    padding: 12px 20px;
+    gap: 14px;
+  }
+
+  .header-left {
+    gap: 20px;
+  }
+
+  .header-nav {
+    gap: 16px;
+  }
+
+  .header-search-wrap {
+    width: 220px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-nav {
+    display: none;
+  }
+
+  .header-search-wrap {
+    width: 170px;
+  }
+}
