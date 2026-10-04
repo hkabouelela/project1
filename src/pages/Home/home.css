@@ -1,0 +1,43 @@
+restaurant-container {
+  padding: 32px;
+  font-family: Arial, sans-serif;
+}
+
+.restaurant-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.restaurant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.restaurant-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.restaurant-name {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #0f172a;
+}
+
+.restaurant-type {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.restaurant-address {
+  margin: 0;
+  font-size: 14px;
+  color: #334155;
+}

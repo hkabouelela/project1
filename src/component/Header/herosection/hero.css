@@ -1,0 +1,44 @@
+.hero{
+    display: flex;
+    flex-wrap: wrap;
+    background-color: #EEEEEE;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 20px;
+    min-height: 200px;
+    height:450px;
+    background-image: linear-gradient( rgba(255, 255, 255, 0.75)), 
+    url('https://images.unsplash.com/photo-1619598794508-424c726e616f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzU0fHxyZWNpcGVzfGVufDB8fDB8fHww');
+     ;
+}
+.hero-text{
+    width: 500px;
+}
+.hero-text h2{
+    margin-bottom: 40px;
+    font-size: 40px;
+    width: 350px;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+.hero-text p{
+    letter-spacing: 2px;
+    color: rgb(99, 94, 94);
+}
+.hero-text button{
+    width: 200px;
+    padding: 10px;
+    margin: 10px 3px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    background-color: rgb(27, 8, 8);
+}
+.hero-text button:hover{
+
+background-color: rgb(170, 137, 137);
+
+}
+
+
