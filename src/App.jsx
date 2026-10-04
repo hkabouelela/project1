@@ -1,3 +1,4 @@
+
 import { Route, Routes, useLocation } from 'react-router-dom';
 import './App.css';
 import { Header } from './components/Header/header';
@@ -31,5 +32,6 @@ function App() {
     </CartProvider>
   );
 }
+
 
 export default App;

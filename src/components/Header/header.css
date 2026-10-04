@@ -1,8 +1,7 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================================================
-   Header - Matching Design Prototype
-   ========================================================================== */
+
 
 .site-header {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -256,4 +255,4 @@
   .header-search-wrap {
     width: 170px;
   }
-}
+}

@@ -28,11 +28,11 @@ async function handleLogin(e){
 
         localStorage.setItem("token", data.token); 
         navigate('/home');
+    } catch {
+      setError("Something went wrong. Please try again");
+      setLoading(false);
     }
-    catch(err){
-        setError("Something went wrong. Please try again");
-         setLoading(false);
-    }
+
 }
 
 return(

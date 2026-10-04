@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useCart } from '../../context/useCart';
@@ -142,9 +143,7 @@ export function Categories() {
     <div className="cat-page-wrapper">
       <div className="cat-container">
         {selectedSlug ? (
-          /* ==========================================================================
-             View: Category Products View
-             ========================================================================== */
+       
           <div className="cat-products-view">
             <div className="cat-products-header">
               <button
@@ -235,9 +234,7 @@ export function Categories() {
             )}
           </div>
         ) : (
-          /* ==========================================================================
-             View: All Categories Grid View
-             ========================================================================== */
+         
           <div className="cat-overview">
             {/* Header Banner */}
             <div className="cat-hero">
@@ -351,3 +348,4 @@ export function Categories() {
     </div>
   );
 }
+
