@@ -1,34 +1,46 @@
 
 import { Link } from 'react-router-dom';
 import './banner.css';
-export function Banner(){
-return(
-<div className='hero'>
 
+export function Banner() {
+  return (
+    <section className="hero">
+      <div className="hero-text">
+        <span className="hero-badge">Curated Collection</span>
+        <h2>
+          Experience the Future <span className="hero-highlight">of Innovation.</span>
+        </h2>
+        <p>
+          Explore our curated selection of premium electronics designed to elevate
+          your daily stream of life. Precision engineering meets minimalist design.
+        </p>
+        <div className="hero-actions">
+          <Link to="/products" className="hero-btn hero-btn-primary">
+            Shop Now
+          </Link>
+          <Link to="/products" className="hero-btn hero-btn-secondary">
+            View Collections
+          </Link>
+        </div>
+      </div>
 
-  <div className="hero-text">
-<h2>Experience the Future
-of Innovation. </h2>
-<p>Explore our curated selection of premium electronics
-designed to elevate your daily stream of life. Precision
-engineering meets minimalist design.
-</p>
-<Link to={'/products'}><button >shop now </button></Link>
-<Link to={'/products'}><button >View Collections </button></Link>
-
-
-</div>
-<div className="hero-image">
-    <img src="https://images.unsplash.com/photo-1599669454699-248893623440?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fGhlYWRwaG9uZXxlbnwwfHwwfHx8MA%3D%3D"/>
-
-
-</div>
-
-</div>
-
-
-
-)
-
-
+      <div className="hero-image">
+        <div className="hero-image-glow" aria-hidden="true" />
+        <div className="hero-image-wrapper">
+          <img
+            src="https://images.unsplash.com/photo-1599669454699-248893623440?w=1000&auto=format&fit=crop&q=80"
+            alt="Premium wireless noise-cancelling headphones"
+            className="hero-img"
+            loading="eager"
+          />
+          <div className="hero-image-card">
+            <span className="hero-card-icon" role="img" aria-label="Headphones">🎧</span>
+            <div className="hero-card-text">
+             
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

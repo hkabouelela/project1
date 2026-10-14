@@ -1,8 +1,8 @@
-
 import { useState, useEffect } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
-import { useCart } from '../../context/useCart';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useCart } from '../../context/useCart';
+import '../Home/home.css';
 import './categories.css';
 import {
   FaCouch,
@@ -19,12 +19,7 @@ import {
   FaBagShopping,
   FaBasketShopping,
   FaHeart,
-  FaArrowLeft,
-  FaArrowRight,
-  FaMagnifyingGlass,
   FaLayerGroup,
-  FaCartShopping,
-  FaStar,
 } from 'react-icons/fa6';
 
 const CATEGORY_ICONS = {
@@ -56,296 +51,178 @@ const CATEGORY_ICONS = {
 
 export function Categories() {
   const [categories, setCategories] = useState([]);
-  const [loadingCategories, setLoadingCategories] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams();
-  const selectedSlug = searchParams.get('c') || null;
-
-  // Selected category products
-  const [categoryProducts, setCategoryProducts] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(false);
-
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [products, setProducts] = useState([]);
   const { addToCart } = useCart();
 
   useEffect(() => {
     fetch('https://dummyjson.com/products/categories')
       .then((res) => res.json())
-      .then((data) => {
-        // DummyJSON returns an array of objects: { slug, name, url } or strings
-        const formatted = Array.isArray(data)
-          ? data.map((item) =>
-              typeof item === 'string'
-                ? { slug: item, name: item.replace(/-/g, ' ') }
-                : item
-            )
-          : [];
-        setCategories(formatted);
-        setLoadingCategories(false);
-      })
-      .catch((err) => {
-        console.error('Failed to load categories', err);
-        setLoadingCategories(false);
-      });
+      .then((data) => setCategories(data))
+      .catch((err) => console.error(err));
   }, []);
 
-  // When a category is selected, fetch its products
   useEffect(() => {
-    if (!selectedSlug) return;
+    if (!selectedCategory) return;
 
-    let ignore = false;
-    fetch(`https://dummyjson.com/products/category/${selectedSlug}`)
+    const url =
+      selectedCategory === 'all'
+        ? 'https://dummyjson.com/products'
+        : `https://dummyjson.com/products/category/${selectedCategory}`;
+
+    fetch(url)
       .then((res) => res.json())
-      .then((data) => {
-        if (!ignore) {
-          setCategoryProducts(data.products || []);
-          setLoadingProducts(false);
-        }
-      })
-      .catch((err) => {
-        if (!ignore) {
-          console.error('Failed to load category products', err);
-          setLoadingProducts(false);
-        }
-      });
+      .then((data) => setProducts(data.products || []))
+      .catch((err) => console.error(err));
+  }, [selectedCategory]);
 
-    return () => {
-      ignore = true;
-    };
-  }, [selectedSlug]);
-
-  function handleSelectCategory(slug) {
-    setLoadingProducts(true);
-    setSearchParams({ c: slug });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function handleBackToCategories() {
-    setCategoryProducts([]);
-    setSearchParams({});
-  }
-
-  function handleAddToCart(product) {
+  function addcart(product) {
     addToCart(product, 1);
     toast.success(`${product.title} added to cart!`);
   }
 
-  const filteredCategories = categories.filter((cat) =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    cat.slug.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const activeCategoryObj = categories.find((c) => c.slug === selectedSlug);
-  const activeCategoryName = activeCategoryObj
-    ? activeCategoryObj.name
-    : selectedSlug?.replace(/-/g, ' ');
-
   return (
     <div className="cat-page-wrapper">
       <div className="cat-container">
-        {selectedSlug ? (
-       
-          <div className="cat-products-view">
-            <div className="cat-products-header">
+        {selectedCategory ? (
+          <div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '12px',
+                marginBottom: '20px',
+              }}
+            >
               <button
-                type="button"
                 className="cat-back-btn"
-                onClick={handleBackToCategories}
+                onClick={() => setSelectedCategory(null)}
               >
-                <FaArrowLeft /> All Categories
+                ← All Categories
               </button>
-
-              <div className="cat-current-info">
-                <div className="cat-header-icon-wrap">
-                  {CATEGORY_ICONS[selectedSlug] || <FaLayerGroup />}
-                </div>
-                <div>
-                  <h1 className="cat-current-title">{activeCategoryName}</h1>
-                  <p className="cat-current-count">
-                    {loadingProducts
-                      ? 'Loading items...'
-                      : `${categoryProducts.length} Products Found`}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {loadingProducts ? (
-              <div className="cat-products-grid">
-                {[1, 2, 3, 4, 5, 6].map((n) => (
-                  <div key={n} className="cat-product-skeleton-card">
-                    <div className="skeleton-thumb" />
-                    <div className="skeleton-line" />
-                    <div className="skeleton-line short" />
-                    <div className="skeleton-btn" />
-                  </div>
-                ))}
-              </div>
-            ) : categoryProducts.length === 0 ? (
-              <div className="cat-empty-view">
-                <FaLayerGroup className="cat-empty-icon" />
-                <h3>No products found in this category</h3>
-                <button
-                  type="button"
-                  className="cat-back-btn primary"
-                  onClick={handleBackToCategories}
-                >
-                  Back to Categories
-                </button>
-              </div>
-            ) : (
-              <div className="cat-products-grid">
-                {categoryProducts.map((p) => (
-                  <div className="cat-product-card" key={p.id}>
-                    <Link to={`/product/${p.id}`} className="cat-card-img-link">
-                      <img src={p.thumbnail} alt={p.title} />
-                      {p.discountPercentage && (
-                        <span className="cat-discount-badge">
-                          -{Math.round(p.discountPercentage)}%
-                        </span>
-                      )}
-                    </Link>
-
-                    <div className="cat-card-body">
-                      <div className="cat-card-rating">
-                        <FaStar className="star-icon" />
-                        <span>{typeof p.rating === 'number' ? p.rating.toFixed(1) : p.rating}</span>
-                      </div>
-
-                      <Link to={`/product/${p.id}`} className="cat-card-title">
-                        {p.title}
-                      </Link>
-
-                      <div className="cat-card-footer">
-                        <span className="cat-card-price">${Number(p.price).toFixed(2)}</span>
-                        <button
-                          type="button"
-                          className="cat-add-cart-btn"
-                          onClick={() => handleAddToCart(p)}
-                          title="Add to cart"
-                          aria-label="Add to cart"
-                        >
-                          <FaCartShopping />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-         
-          <div className="cat-overview">
-            {/* Header Banner */}
-            <div className="cat-hero">
-              <div className="cat-hero-badge">
-                <FaLayerGroup /> Explore Categories
-              </div>
-              <h1 className="cat-hero-title">Browse by Category</h1>
-              <p className="cat-hero-desc">
-                Find exactly what you love. Select a department to explore high-quality
-                products curated for you.
-              </p>
-
-              {/* Search Bar */}
-              <div className="cat-search-bar">
-                <FaMagnifyingGlass className="cat-search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search categories (e.g. beauty, laptops, smartphones)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    className="cat-clear-search"
-                    onClick={() => setSearchQuery('')}
-                  >
-                    &times;
-                  </button>
+              <h2
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  textTransform: 'capitalize',
+                  margin: 0,
+                }}
+              >
+                {selectedCategory === 'all' ? (
+                  <FaLayerGroup />
+                ) : (
+                  CATEGORY_ICONS[selectedCategory]
                 )}
-              </div>
+                {selectedCategory === 'all'
+                  ? 'All Products'
+                  : selectedCategory.replace(/-/g, ' ')}
+              </h2>
             </div>
 
-            {/* Quick Filter Pill Badges */}
-            <div className="cat-quick-pills">
+            {/* Quick category switch pills */}
+            <div
+              style={{
+                display: 'flex',
+                gap: '8px',
+                overflowX: 'auto',
+                paddingBottom: '16px',
+                marginBottom: '20px',
+              }}
+            >
               <button
                 type="button"
-                className={`quick-pill ${!searchQuery ? 'active' : ''}`}
-                onClick={() => setSearchQuery('')}
+                onClick={() => setSelectedCategory('all')}
+                className={`quick-pill ${selectedCategory === 'all' ? 'active' : ''}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  whiteSpace: 'nowrap',
+                }}
               >
-                All ({categories.length})
+                <FaLayerGroup /> All
               </button>
-              {categories.slice(0, 8).map((cat) => (
-                <button
-                  key={cat.slug}
-                  type="button"
-                  className="quick-pill"
-                  onClick={() => handleSelectCategory(cat.slug)}
-                >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
-
-            {/* Categories Card Grid */}
-            {loadingCategories ? (
-              <div className="cat-grid">
-                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((n) => (
-                  <div key={n} className="cat-card skeleton">
-                    <div className="skeleton-icon" />
-                    <div className="skeleton-line" />
-                    <div className="skeleton-line short" />
-                  </div>
-                ))}
-              </div>
-            ) : filteredCategories.length === 0 ? (
-              <div className="cat-empty-view">
-                <FaLayerGroup className="cat-empty-icon" />
-                <h3>No categories match "{searchQuery}"</h3>
-                <p>Try searching for a different keyword or reset filters.</p>
-                <button
-                  type="button"
-                  className="cat-back-btn primary"
-                  onClick={() => setSearchQuery('')}
-                >
-                  Reset Search
-                </button>
-              </div>
-            ) : (
-              <div className="cat-grid">
-                {filteredCategories.map((cat) => (
-                  <div
-                    key={cat.slug}
-                    className="cat-card"
-                    onClick={() => handleSelectCategory(cat.slug)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleSelectCategory(cat.slug);
+              {categories.map((cat) => {
+                const slug = typeof cat === 'object' ? cat.slug : cat;
+                const name = typeof cat === 'object' ? cat.name : cat;
+                const isActive = selectedCategory === slug;
+                return (
+                  <button
+                    key={slug}
+                    type="button"
+                    onClick={() => setSelectedCategory(slug)}
+                    className={`quick-pill ${isActive ? 'active' : ''}`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      whiteSpace: 'nowrap',
                     }}
                   >
-                    <div className="cat-icon-container">
-                      {CATEGORY_ICONS[cat.slug] || <FaLayerGroup />}
-                    </div>
+                    {CATEGORY_ICONS[slug]} {name}
+                  </button>
+                );
+              })}
+            </div>
 
-                    <div className="cat-card-info">
-                      <h3 className="cat-name">{cat.name}</h3>
-                      <span className="cat-slug-tag">/{cat.slug}</span>
-                    </div>
-
-                    <div className="cat-card-arrow">
-                      <FaArrowRight />
-                    </div>
-                  </div>
-                ))}
+            {/* Products grid displayed exactly like the products page */}
+            <div className="grid">
+              {products.map((p) => (
+                <div className="card" key={p.id}>
+                  <Link
+                    to={`/product/${p.id}`}
+                    style={{ textDecoration: 'none', color: 'black' }}
+                  >
+                    <img src={p.thumbnail} alt={p.description} />
+                    <h2>{p.title}</h2>
+                    <p>price :${p.price}</p>
+                  </Link>
+                  <button onClick={() => addcart(p)}>add to cart</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="cat-grid">
+            <div
+              className="cat-card"
+              onClick={() => setSelectedCategory('all')}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className="cat-icon-container">
+                <FaLayerGroup />
               </div>
-            )}
+              <div className="cat-card-info">
+                <h3 className="cat-name">All Products</h3>
+              </div>
+            </div>
+
+            {categories.map((cat) => {
+              const slug = typeof cat === 'object' ? cat.slug : cat;
+              const name = typeof cat === 'object' ? cat.name : cat;
+
+              return (
+                <div
+                  key={slug}
+                  className="cat-card"
+                  onClick={() => setSelectedCategory(slug)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <div className="cat-icon-container">
+                    {CATEGORY_ICONS[slug]}
+                  </div>
+                  <div className="cat-card-info">
+                    <h3 className="cat-name">{name}</h3>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         )}
       </div>
     </div>
   );
 }
-
